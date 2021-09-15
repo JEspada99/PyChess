@@ -50,9 +50,14 @@ def main():
                 if len(playerClick) == 2: #second click
                     squareMove = GameEngine.getChessNotation(playerClick[0], playerClick[1])
                     move = chess.Move.from_uci(squareMove)
+
                     if move in board.legal_moves:
                         board.push(move)
                         print(board)
+                    elif chess.Move.from_uci(squareMove+"q") in board.legal_moves: #promotion
+                        board.push(chess.Move.from_uci(squareMove+"q"))
+                        print(board)
+
                     sqSelected = ()
                     playerClick = []
                     #update the board
