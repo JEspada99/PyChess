@@ -22,11 +22,14 @@ def main():
     # Initializes chess engine
     board = chess.Board()
     boardConverted = GraphicEngine.make_matrix(board)
-    print(boardConverted)
 
     # Variables for the moves
     sqSelected = () #square actually selected
     playerClick = [] #tracker of clicks
+
+    # Generates the first time the game
+    GraphicEngine.drawGameState(screen, board)
+    pygame.display.flip()
 
     while running:
         for event in pygame.event.get():
@@ -37,6 +40,8 @@ def main():
                 col = location[0]//SQ_SIZE #col of square
                 row = location[1]//SQ_SIZE #row of square
                 if sqSelected == (row, col): #click twice
+                    GraphicEngine.drawGameState(screen, board) #demark possible moves
+                    pygame.display.flip()
                     sqSelected = () #deselect
                     playerClick = []
                 else:
@@ -50,14 +55,24 @@ def main():
                         print(board)
                     sqSelected = ()
                     playerClick = []
-            
+                    GraphicEngine.drawGameState(screen, board)
+                    pygame.display.flip()
+                elif len(playerClick) == 1: #mark possible moves
+                    movesToPaint = []
+                    legal_moves = list(board.legal_moves)
+                    # for each legal_move, mark piece's ones
+                    for moves in legal_moves:
+                        if moves.uci()[:2] == GameEngine.getChessNotationStart(playerClick[0]):
+                            possibleXY = GameEngine.getBoardNotation(moves.uci()[2:])
+                            movesToPaint.append(possibleXY)
+                        GraphicEngine.drawGameState(screen, board, movesToPaint)
+                        pygame.display.flip()
+
             # Checkmate, insuficent material, stalemate...
             if board.is_game_over():
                 # Message
                 running = False #close the game automatically
-        
-        GraphicEngine.drawGameState(screen, board)
-        pygame.display.flip()
+
 
 if __name__ == "__main__":
     main()
