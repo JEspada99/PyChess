@@ -55,6 +55,7 @@ def main():
                         print(board)
                     sqSelected = ()
                     playerClick = []
+                    #update the board
                     GraphicEngine.drawGameState(screen, board)
                     pygame.display.flip()
                 elif len(playerClick) == 1: #mark possible moves
@@ -65,8 +66,8 @@ def main():
                         if moves.uci()[:2] == GameEngine.getChessNotationStart(playerClick[0]):
                             possibleXY = GameEngine.getBoardNotation(moves.uci()[2:])
                             movesToPaint.append(possibleXY)
-                        GraphicEngine.drawGameState(screen, board, movesToPaint)
-                        pygame.display.flip()
+                    GraphicEngine.drawGameState(screen, board, movesToPaint)
+                    pygame.display.flip()
 
             # Checkmate, insuficent material, stalemate...
             if board.is_game_over():

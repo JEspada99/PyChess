@@ -7,11 +7,11 @@ def loadImages():
     for piece in pieces:
         IMAGES[piece] = pygame.transform.scale(pygame.image.load("images/" + piece + ".png"), (SQ_SIZE, SQ_SIZE))
 
-def drawGameState(screen, board, coord=None):
+def drawGameState(screen, board, coordToPaint=None):
     drawBoard(screen)
     drawPieces(screen, board)
-    if coord is not None:
-        markPossibleMoves(screen, coord)
+    if coordToPaint is not None:
+        markPossibleMoves(screen, coordToPaint)
 
 def drawBoard(screen):
     colors = [pygame.Color("white"), pygame.Color("gray")]
@@ -31,7 +31,11 @@ def drawPieces(screen, board):
 def markPossibleMoves(screen, coord):
     for moves in coord:
         color = pygame.Color("red")
-        pygame.draw.rect(screen, color, pygame.Rect(moves[1]*SQ_SIZE, moves[0]*SQ_SIZE, SQ_SIZE, SQ_SIZE))
+        pygame.draw.rect(screen, color, pygame.Rect(moves[1]*SQ_SIZE, moves[0]*SQ_SIZE, SQ_SIZE, SQ_SIZE), width=3)
+
+def markWhatToMove(screen, coord):
+    color = pygame.Color("green")
+    pygame.draw.rect(screen, color, pygame.Rect(coord[0]*SQ_SIZE, coord[1]*SQ_SIZE, SQ_SIZE, SQ_SIZE), width=3)
 
 # Conversion of the chess board into a matrix
 def make_matrix(board): #type(board) == chess.Board()
