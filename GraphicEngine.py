@@ -1,15 +1,23 @@
 import pygame
-from main import SQ_SIZE, IMAGES, DIMENSION
 import chess
+
+# Global variables
+WIDTH = HEIGHT = 512  # screen size
+DIMENSION = 8  # 8x8 board
+SQ_SIZE = HEIGHT // DIMENSION
+MAX_FPS = 15
+IMAGES = {}
 
 def loadImages():
     pieces = ['P', 'R', 'N', 'B', 'K', 'Q', 'p', 'r', 'n', 'b', 'k', 'q']
     for piece in pieces:
         IMAGES[piece] = pygame.transform.scale(pygame.image.load("images/" + piece + ".png"), (SQ_SIZE, SQ_SIZE))
 
-def drawGameState(screen, board, coordToPaint=None):
+def drawGameState(screen, board, coordToPaint=None, coordOfMove=None):
     drawBoard(screen)
     drawPieces(screen, board)
+    if coordOfMove is not None:
+        markWhatToMove(screen, coordOfMove)
     if coordToPaint is not None:
         markPossibleMoves(screen, coordToPaint)
 
@@ -35,7 +43,7 @@ def markPossibleMoves(screen, coord):
 
 def markWhatToMove(screen, coord):
     color = pygame.Color("green")
-    pygame.draw.rect(screen, color, pygame.Rect(coord[0]*SQ_SIZE, coord[1]*SQ_SIZE, SQ_SIZE, SQ_SIZE), width=3)
+    pygame.draw.rect(screen, color, pygame.Rect(coord[1]*SQ_SIZE, coord[0]*SQ_SIZE, SQ_SIZE, SQ_SIZE), width=3)
 
 # Conversion of the chess board into a matrix
 def make_matrix(board): #type(board) == chess.Board()
